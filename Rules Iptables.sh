@@ -5,21 +5,21 @@ echo Setting firewall rules...
 
 
 
-###### Debut Initialisation ######
+###### Start Initialization ######
 
-# Interdire toutes connexions entrantes
+# Prohibit all incoming connections
 iptables -t filter -P INPUT DROP
 iptables -t filter -P FORWARD DROP
-echo - Interdire toute connexion entrante : [OK]
+echo - Prohibit all incoming connections : [OK]
 
-# Interdire toutes connexions sortantes
+# Prohibit all outgoing connections
 iptables -t filter -P OUTPUT DROP
-echo - Interdire toute connexion sortante : [OK]
+echo -  Prohibit all outgoing connections : [OK]
 
-# Vider les tables actuelles
+# Empty tables present
 iptables -t filter -F
 iptables -t filter -X
-echo - Vidage : [OK]
+echo - Empty tables : [OK]
 
 
 
@@ -32,8 +32,8 @@ echo - Anti Woot-Woot : [OK]
 
 
 
-#Gestion firewall SMTP
-#Creation d'une chaine
+# Management SMTP firewall
+# Creation of a string
 iptables -N LOG_REJECT_SMTP
 iptables -A LOG_REJECT_SMTP -j LOG --log-prefix ' SMTP REJECT PAQUET : '
 iptables -A LOG_REJECT_SMTP -j DROP
@@ -42,7 +42,7 @@ iptables -A LOG_REJECT_SMTP -j DROP
 iptables -t filter -A INPUT -i eth0 -s 61.64.128.0/17 -j LOG_REJECT_SMTP
 iptables -t filter -A INPUT -i eth0 -s 122.120.0.0/13 -j LOG_REJECT_SMTP
 iptables -t filter -A INPUT -i eth0 -s 168.95.0.0/16 -j LOG_REJECT_SMTP
-echo - Bloquer Taiwanais : [OK]
+echo - Anti Taiwanais : [OK]
 
 
 
@@ -55,23 +55,23 @@ iptables -A INPUT -p tcp --tcp-flags ALL FIN -j DROP
 iptables -A INPUT -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
 iptables -A INPUT -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP
 iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
-echo "- Anti scan : [OK]"
+echo - Anti scan : [OK]
 
 
 
 
-#Autorisation des ports principaux
-# Ne pas casser les connexions etablies
+# Properties major ports
+# Do not break established connections
 iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
-echo - Ne pas casser les connexions établies : [OK]
+echo "- Do not break established connections : [OK]"
 
-# Autoriser la Supervision du serveur (SNMP)
+# Allow Monitoring Server (SNMP)
 iptables -t filter -A INPUT -p tcp --dport 161 -s IP_SUPERVISION/32 -j ACCEPT
 iptables -t filter -A INPUT -p udp --dport 161 -s IP_SUPERVISION/32 -j ACCEPT
-echo - Autoriser Supervision : [OK]
+echo - Allow Monitoring Server (SNMP) : [OK]
 
-# Autoriser les requetes DNS, FTP, HTTP, NTP
+# Allow DNS queries, FTP, HTTP, NTP
 iptables -t filter -A OUTPUT -p tcp --dport 22 -j ACCEPT
 iptables -t filter -A OUTPUT -p tcp --dport 21 -j ACCEPT
 iptables -t filter -A OUTPUT -p tcp --dport 80 -j ACCEPT
@@ -79,17 +79,17 @@ iptables -t filter -A OUTPUT -p tcp --dport 53 -j ACCEPT
 iptables -t filter -A OUTPUT -p udp --dport 53 -j ACCEPT
 iptables -t filter -A OUTPUT -p udp --dport 123 -j ACCEPT
 iptables -t filter -A OUTPUT -p tcp --dport 443 -j ACCEPT
-echo - Autoriser les requetes DNS, FTP, HTTP : [OK]
+echo - Allow DNS queries, FTP, HTTP, NTP : [OK]
 
-# Autoriser loopback
+# Allow loopback
 iptables -t filter -A INPUT -i lo -j ACCEPT
 iptables -t filter -A OUTPUT -o lo -j ACCEPT
-echo - Autoriser loopback : [OK]
+echo - Allow loopback : [OK]
 
-# Autoriser ping
+# Allow ping
 iptables -t filter -A INPUT -p icmp -j ACCEPT
 iptables -t filter -A OUTPUT -p icmp -j ACCEPT
-echo - Autoriser ping : [OK]
+echo - Allow ping : [OK]
 
 
 
@@ -97,20 +97,19 @@ echo - Autoriser ping : [OK]
 
 
 
-#Autorisation des serveur locaux
+# Local server properties
 # HTTP
 iptables -t filter -A INPUT -p tcp --dport 21 -j ACCEPT
 iptables -t filter -A INPUT -p tcp --dport 80 -j ACCEPT
 iptables -t filter -A INPUT -p tcp --dport 443 -j ACCEPT
-echo - Autoriser serveur Nginx : [OK]# HTTP
-echo - Autoriser serveur FTP : [OK]
+echo - Local server properties: [OK]
 
 iptables -t filter -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 #DNS
 iptables -t filter -A INPUT -p tcp --dport 53 -j ACCEPT
 iptables -t filter -A INPUT -p udp --dport 53 -j ACCEPT
-echo - Autoriser serveur Bind : [OK]
+echo - Allow Server Bind : [OK]
 
 # Mail
 iptables -t filter -A INPUT -p tcp --dport 22 -j ACCEPT
@@ -120,14 +119,14 @@ iptables -t filter -A INPUT -p tcp --dport 143 -j ACCEPT
 iptables -t filter -A OUTPUT -p tcp --dport 25 -j ACCEPT
 iptables -t filter -A OUTPUT -p tcp --dport 110 -j ACCEPT
 iptables -t filter -A OUTPUT -p tcp --dport 143 -j ACCEPT
-echo - Autoriser serveur Mail : [OK]
+echo - Allow Server Mail : [OK]
 
 
 
-#Autoriser le partage SAMBA
+# Allow sharing SAMBA
 iptables -A INPUT -p tcp --dport 139 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 139 -j ACCEPT
 
-#Autoriser istats (Monitoring du serveur via IOS)
+# Allow iStats (Monitoring Server via IOS)
 iptables -A INPUT -p tcp --dport 5109 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 5109 -j ACCEPT

@@ -1,11 +1,11 @@
-Regles-IPTables
+Rules-IPTables
 ==============================================
 
-Scripts détaillés permettant de réaliser des règles pour votre firewall IPTABLES afin de sécuriser votre serveur.
-Le script est ouvert à tous, pour le moment seule des règles "standard" sont inscrites mais celui-ci est suseptible d'évoluer prochainement.
+Detailed scripts to make rules for IPTABLES firewall to secure your server. The script is open to all, for the moment only the "standard" rules are listed but it is suseptible to change soon.
 
 
 -----------
 
-Pour plus d'informations afin de comprendre ces régles, je vous invite à visiter cette page :
+For more information to understand the rules, I invite you to visit this page :
 http://www.admin-debian.com/securite/commandes-iptables/
+
