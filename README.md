@@ -9,3 +9,6 @@ Detailed scripts to make rules for IPTABLES firewall to secure your server. The 
 For more information to understand the rules, I invite you to visit this page :
 http://www.admin-debian.com/securite/commandes-iptables/
 
+UPDATE 
+-----------
+Add OpenShift's rules (Broker + Node)
